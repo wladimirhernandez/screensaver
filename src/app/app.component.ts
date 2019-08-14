@@ -17,8 +17,9 @@ import { Location } from '@angular/common';
   ]
 })
 export class AppComponent {
-  userActivity;
+  
   userLocation;
+  userActivity;
   userInactive: Subject<any> = new Subject();
   constructor(
     private platform: Platform,
@@ -29,31 +30,28 @@ export class AppComponent {
     private location: Location
   ) {
     this.setTimeout();
-    this.initializeApp();
     this.userInactive.subscribe(() =>
     this.showSlides());
+    this.initializeApp();
+  
   }
 
   showSlides() {
     this.router.navigate(['/screensaver']);
     this.userLocation = true;
   }
-
   setTimeout() {
     this.userActivity = setTimeout(() => this.userInactive.next(undefined), 20000);
   }
 
   @HostListener('window:mousemove') refreshUserState() {
+    clearTimeout(this.userActivity);
+    this.setTimeout();
     if(this.userLocation) {
-      console.log('entró en actividad')
-      clearTimeout(this.userActivity);
-      this.location.back();
-      this.setTimeout();
-      this.userLocation = false;
+    this.userLocation = false;
+    this.location.back();
     }
   }
-
-
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -66,6 +64,16 @@ export class AppComponent {
       );
     });
   }
+
+  /*
+  @HostListener('window:mousemove') refreshUserState() {
+    if(this.userLocation) {
+      console.log('entró en actividad')
+      clearTimeout(this.userActivity);
+      this.setTimeout();
+      this.location.back();
+      this.userLocation = false;
+    }*/
 
 }
 
