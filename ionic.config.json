@@ -1,5 +1,7 @@
 {
   "name": "screensaver",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
